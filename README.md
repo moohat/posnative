@@ -1,4 +1,4 @@
-# posnative
+# Aplikasi Pos dengan PHP Native
 aplikasi pos native dengan php, tutorial belajar dari youtube chanelnya pa parman. terima kasih kpd pa Parman yang telah share ilmunya
 semoga berkah dunia akherat
 
