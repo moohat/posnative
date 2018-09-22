@@ -9,6 +9,8 @@ tujuan dibuat aplikasi ini adalah sebagai sarana belajar bahasa pemrograman php 
 
 semoga aplikasi ini bermanfaat.
 
-terima kasih,\n
+terima kasih,
+
+
 M. Taufik Hidayat
 
