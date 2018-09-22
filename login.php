@@ -118,13 +118,22 @@ if($login){
 
     if($data['level']=="admin"){
     session_start();
-      $_SESSION['admin'] = $username;
+      $_SESSION['admin'] = $data['id_petugas'];
       header("location:index.php");
 
+    } if($data['level']=="kasir"){
+    session_start();
+      $_SESSION['kasir'] = $data['id_petugas'];
+      header("location:index.php");
     }
 
   }else{
-      echo "gagal login";
+    ?>
+    <script type="text/javascript">
+            alert("Login Gagal, username atau password salah");
+          </script>
+
+    <?php 
     }
 }
 }

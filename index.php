@@ -1,12 +1,10 @@
 <?php 
 
-session_start();
-if(empty($_SESSION['admin'])){
-  header("location:login.php"); //jika belum login, maka dikembalika ke file login.php
-}
-else{
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 $koneksi = new mysqli("127.0.0.1","root","","db_pos" );
+session_start();
+if($_SESSION['admin'] || $_SESSION['kasir'] ){
+  
 
 
 ?>
@@ -68,6 +66,18 @@ desired effect
 |---------------------------------------------------------|
 -->
 <body class="hold-transition skin-blue sidebar-mini">
+
+  <?php 
+  if($_SESSION['admin']){
+    $user = $_SESSION['admin'];
+  } elseif($_SESSION['kasir']){
+    $user = $_SESSION['kasir'];
+  }
+  $sql = $koneksi->query("SELECT * FROM tb_petugas WHERE id_petugas='$user'");
+  
+  $data = $sql->fetch_assoc();
+
+   ?>
   <div class="wrapper">
 
     <!-- Main Header -->
@@ -191,17 +201,17 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="dist/img/<?php echo $data['foto']; ?>" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"><?php echo $data['username']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="dist/img/<?php echo $data['foto']; ?>" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
+                  <?php echo $data['nama_petugas']; ?> - Web Developer
                   <small>Member since Nov. 2012</small>
                 </p>
               </li>
@@ -239,6 +249,8 @@ desired effect
       </div>
     </nav>
   </header>
+
+  
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -248,10 +260,10 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="dist/img/<?php echo $data['foto']; ?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?php echo $data['username']; ?></p>
           <!-- Status -->
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
@@ -269,12 +281,17 @@ desired effect
       </form>
       <!-- /.search form -->
 
+
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="index.php"><i class="fa fa-home"></i> <span>Home</span></a></li>
         <!-- Optionally, you can add icons to the links -->
+
+        <?php 
+        if($_SESSION['admin'] ){
+         ?>
         <li><a href="?page=barang"><i class="fa fa-inbox"></i> <span>Barang</span></a></li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="?page=pelanggan"><i class="fa fa-users"></i> <span>Pelanggan</span></a></li>
@@ -284,6 +301,9 @@ desired effect
         <li><a href="?page=petugas"><i class="fa fa-user"></i> <span>Petugas</span></a></li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="?page=modal"><i class="fa fa-inbox"></i> <span>Test Modal</span></a></li>
+
+        <?php 
+        } ?>
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -531,5 +551,8 @@ desired effect
    </body>
    </html>
    <?php 
+} else{
+  header("location:login.php"); //jika belum login, maka dikembalika ke file login.php
 }
+
     ?> 
