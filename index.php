@@ -1,8 +1,9 @@
 <?php 
 
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
-$koneksi = new mysqli("127.0.0.1","root","","db_pos" );
 session_start();
+include "kodepj.php";
+$koneksi = new mysqli("127.0.0.1","root","","db_pos" );
 if($_SESSION['admin'] || $_SESSION['kasir'] ){
   
 
@@ -301,6 +302,8 @@ desired effect
         <li><a href="?page=petugas"><i class="fa fa-user"></i> <span>Petugas</span></a></li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="?page=modal"><i class="fa fa-inbox"></i> <span>Test Modal</span></a></li>
+        <!-- Optionally, you can add icons to the links -->
+        <li><a href="?page=penjualan&kodepj=<?php echo $kode; ?>"><i class="fa fa-money"></i> <span>Penjualan</span></a></li>
 
         <?php 
         } ?>
@@ -414,6 +417,23 @@ desired effect
             }//hapus data barang
             if($aksi =='delete'){
               include "page/petugas/delete.php";
+            }
+          }
+
+
+          //page halaman penjualan
+          if($page== 'penjualan'){
+            if($aksi ==''){
+              include "page/penjualan/penjualan.php";
+            }if($aksi =='tambah'){
+              include "page/penjualan/tambah.php";
+            }
+              //ubah data barang
+            if($aksi =='ubah'){
+              include "page/penjualan/ubah.php";
+            }//hapus data barang
+            if($aksi =='delete'){
+              include "page/penjualan/delete.php";
             }
           }
 
