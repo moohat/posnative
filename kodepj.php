@@ -9,4 +9,6 @@
     return $string;
   }
   $kode = kode_random(10);
+
+  
 ?>

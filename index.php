@@ -304,6 +304,7 @@ desired effect
         <li><a href="?page=modal"><i class="fa fa-inbox"></i> <span>Test Modal</span></a></li>
         <!-- Optionally, you can add icons to the links -->
         <li><a href="?page=penjualan&kodepj=<?php echo $kode; ?>"><i class="fa fa-money"></i> <span>Penjualan</span></a></li>
+        
 
         <?php 
         } ?>
