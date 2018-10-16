@@ -3,6 +3,7 @@
 
 <?php
 $kode = $_GET['kodepj'];
+$nama_petugas = $data['nama_petugas'];
 ?>
 
 <!-- general form elements -->
@@ -62,6 +63,23 @@ if (isset($_POST['simpan'])) {
 
 }
 ?>
+
+<br><br><br><br>
+<form method="post">
+<div class="col-md-4">
+<label for="">Pelanggan</label>
+<select name="pelanggan" class="form-control show-tick">
+<?php
+$pelanggan = $koneksi->query("SELECT * FROM  tb_pelanggan order by kode_pelanggan");
+while($d_pelanggan = $pelanggan->fetch_assoc()){
+	echo"
+	<option value='$d_pelanggan[kode_pelanggan]'>$d_pelanggan[nama]</option>
+	";
+}
+?>
+</select>
+</div>
+
 <hr><hr><hr>
 <div class="box">
 	<div class="box-header">
@@ -77,6 +95,7 @@ if (isset($_POST['simpan'])) {
 					<th>Harga</th>
 					<th>Jumlah</th>
 					<th>Subtotal</th>
+					<th>Aksi</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -109,7 +128,7 @@ while ($data = $sql->fetch_assoc()) {
 			</tbody>
 			<tr>
 			<th colspan="5" style="text-align: right;">Total</th>
-			<td><input style="text-align: right;" type="text" id="total_bayar" onkeyup="hitung();" value="<?php echo $total_bayar?>" readonly></td>
+			<td><input style="text-align: right;" type="text" nama="total_bayar" id="total_bayar" onkeyup="hitung();" value="<?php echo $total_bayar?>" readonly></td>
 			</tr>
 			<tr>
 			<th colspan="5" style="text-align: right;">Diskon</th>
@@ -132,7 +151,10 @@ while ($data = $sql->fetch_assoc()) {
 			<tr>
 			<th colspan="5" style="text-align: right;">Kembali</th>
 			<td><input style="text-align: right;" name="kembali" id="kembali"  type="number">
-			<input type="submit" name="simpan_pj" value="Cetak">
+			
+			<input type="submit" name="simpan_pj" value="Simpan" class="btn btn-info btn-flat">
+
+			<input type="submit" value="Cetak Struk" class="btn btn-success btn-flat" onclick="window.open('page/penjualan/struk.php?kode_pj=<?php echo $kode; ?>&nama_petugas=<?php echo $nama_petugas; ?>','mywindow','width=500px, height=600px, left=300px;')">
 			</td>
 			</tr>
 
@@ -142,6 +164,27 @@ while ($data = $sql->fetch_assoc()) {
 	<!-- /.box-body -->
 </div>
 <!-- /.box -->
+</form>
+
+<?php
+if(isset($_POST['simpan_pj'])){
+	$pelanggan = $_POST['pelanggan'];
+	$total_bayar = $_POST['total_$total_bayar'];
+	$diskon = $_POST['diskon'];
+	$potongan = $_POST['potongan'];
+	$s_total = $_POST['s_total'];
+
+
+	$bayar = $_POST['bayar'];
+	$kembali = $_POST['kembali'];
+
+	$koneksi->query("INSERT INTO tb_penjualan_detail(kode_penjualan, bayar, kembali, diskon, potongan, total )VALUES('$kode', '$bayar','$kembali','$diskon','$potongan', '$s_total')");
+
+	$koneksi->query("UPDATE tb_penjualan SET id_pelanggan='$pelanggan' WHERE kode_penjualan='$kode'");
+
+}
+
+?>
 
 
 
@@ -168,14 +211,5 @@ function hitung() {
 		var kembalian =	document.getElementById('kembali').value=kembali;
 	}
 	}
-
-
-
-
-
-	
-	
-
-
 
 </script>
