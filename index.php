@@ -386,7 +386,7 @@ desired effect
             }
               //ubah data barang
             if($aksi =='ubah'){
-              include "page/penjualan/ubah.php";
+              include "page/penjualan/kurang.php";
             }//hapus data barang
             if($aksi =='delete'){
               include "page/penjualan/delete.php";

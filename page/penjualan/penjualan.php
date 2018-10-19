@@ -111,12 +111,13 @@ while ($data = $sql->fetch_assoc()) {
                   <td><?php echo $data['kode_barcode']; ?></td>
                   <td><?php echo $data['nama_barang']; ?></td>
                   <td><?php echo $data['harga_jual']; ?></td>
-                  <td><?php echo $data['jumlah']; ?></td>
-                  <td><?php echo $data['total']; ?></td>
+                  <td> <?php echo $data['jumlah']; ?></td>
+                  <td> <?php echo $data['total']; ?></td>
 				  <td>
-					<a href="?page=pelanggan&aksi=ubah&id=<?php echo $data['kode_pelanggan'] ?>" class="btn btn-warning btn-flat" >Tambah</a>
-					<a href="?page=pelanggan&aksi=ubah&id=<?php echo $data['kode_pelanggan'] ?>" class="btn btn-warning btn-flat" >Kurang</a>
-                  	<a onclick="return confirm('apakah mau hapus data?')" href="?page=pelanggan&aksi=delete&id=<?php echo $data['kode_pelanggan'] ?>" class="btn btn-danger btn-flat" >Hapus</a>
+					<a href="?page=penjualan&aksi=tambah&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-success btn-flat" title="Tambah" ><i class="fa fa-plus"></i> </a>
+					<a href="?page=penjualan&aksi=kurang&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-warning btn-flat" title="Kurang" ><i class="fa fa-minus"></i></a>
+                  	
+					  <a href="?page=penjualan&aksi=delete&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-danger btn-flat" title="Hapus" ><i class="fa fa-trash-o"></i></a>
                   </td>
 
                 </tr>
@@ -154,7 +155,7 @@ while ($data = $sql->fetch_assoc()) {
 			
 			<input type="submit" name="simpan_pj" value="Simpan" class="btn btn-info btn-flat">
 
-			<input type="submit" value="Cetak Struk" class="btn btn-success btn-flat" onclick="window.open('page/penjualan/struk.php?kode_pj=<?php echo $kode; ?>&nama_petugas=<?php echo $nama_petugas; ?>','mywindow','width=500px, height=600px, left=300px;')">
+			<input type="submit" value="Cetak Struk" class="btn btn-success btn-flat" onclick="window.open('page/penjualan/struk.php?kode_pj=<?php echo $kode; ?>&nama_petugas=<?php echo $nama_petugas; ?>','mywindow','width=600px, height=600px, left=300px;')">
 			</td>
 			</tr>
 
@@ -178,7 +179,7 @@ if(isset($_POST['simpan_pj'])){
 	$bayar = $_POST['bayar'];
 	$kembali = $_POST['kembali'];
 
-	$koneksi->query("INSERT INTO tb_penjualan_detail(kode_penjualan, bayar, kembali, diskon, potongan, total )VALUES('$kode', '$bayar','$kembali','$diskon','$potongan', '$s_total')");
+	$koneksi->query("INSERT INTO tb_penjualan_detail(kode_penjualan, bayar, kembali, diskon, potongan, total_b )VALUES('$kode', '$bayar','$kembali','$diskon','$potongan', '$s_total')");
 
 	$koneksi->query("UPDATE tb_penjualan SET id_pelanggan='$pelanggan' WHERE kode_penjualan='$kode'");
 
@@ -210,6 +211,14 @@ function hitung() {
 
 		var kembalian =	document.getElementById('kembali').value=kembali;
 	}
+
+
 	}
+
+	
+}
+
+	
+
 
 </script>
