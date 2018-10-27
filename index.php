@@ -85,11 +85,11 @@ desired effect
     <header class="main-header">
 
       <!-- Logo -->
-      <a href="index2.html" class="logo">
+      <a href="index.php" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
-        <span class="logo-mini"><b>A</b>LT</span>
+        <span class="logo-mini"><b>A</b>BC</span>
         <!-- logo for regular state and mobile devices -->
-        <span class="logo-lg"><b>Admin</b>LTE</span>
+        <span class="logo-lg"><b>Kopearsi</b>ABC</span>
       </a>
 
       <!-- Header Navbar -->
@@ -385,12 +385,16 @@ desired effect
               include "page/penjualan/tambah.php";
             }
               //ubah data barang
-            if($aksi =='ubah'){
+            if($aksi =='kurang'){
               include "page/penjualan/kurang.php";
             }//hapus data barang
             if($aksi =='delete'){
               include "page/penjualan/delete.php";
             }
+          }
+
+          if($page==""){
+            include "home.php";
           }
 
         ?>

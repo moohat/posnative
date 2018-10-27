@@ -13,6 +13,7 @@ if($sql || $sql1 || $sql2){
     <script>
     window.location.href="?page=penjualan&kodepj=<?php echo $kode_pj; ?>";
     </script>
+
     <?php
 }
 

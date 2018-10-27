@@ -32,34 +32,60 @@ if (isset($_POST['simpan'])) {
     $date = date("Y-m-d");
 
     $kd_pj = $_POST['kode'];
-    $barcode = $_POST['kode_barcode'];
+    $kode_barcode = $_POST['kode_barcode'];
 
-    $barang = $koneksi->query("SELECT * FROM tb_barang WHERE kode_barcode='$barcode'");
+    $barang = $koneksi->query("SELECT * FROM tb_barang WHERE kode_barcode='$kode_barcode'");
 
     $data_barang = $barang->fetch_assoc();
     $harga_jual = $data_barang['harga_jual'];
     $jumlah = 1;
     $total = $jumlah * $harga_jual;
-    $barang2 = $koneksi->query("SELECT * FROM tb_barang WHERE kode_barcode='$barcode'");
+    $barang2 = $koneksi->query("SELECT * FROM tb_barang WHERE kode_barcode='$kode_barcode'");
+	$penjualan2 = $koneksi->query("SELECT * FROM tb_penjualan WHERE kode_barcode='$kode_barcode' AND kode_penjualan='$kode'");
+	$dataPenjualan = $penjualan2->fetch_assoc();
 
     while ($data_barang2 = $barang2->fetch_assoc()) {
-        $sisa = $data_barang2['stok'];
+		$sisa = $data_barang2['stok'];
+		$jual = $dataPenjualan['kode_barcode'];
+		
 
-        if ($sisa < 1) {
+        if ($sisa < 1 ) {
             ?>
 
 			<script type="text/javascript">
 
 				alert("Stock Barang HABIS... Tidak Dapat melakukan penjualan");
+
 				window.location.href='?page=penjualan&kodepj=<?php echo $kode; ?>'
 			</script>
 
 			<?php
-} else {
-            $inputData = $koneksi->query("INSERT INTO tb_penjualan (kode_penjualan, kode_barcode, jumlah, total, tgl_penjualan ) values('$kode','$barcode', '$jumlah', '$total', '$date' ) ");
-        }
+} 
 
-    }
+//validasi data barcode agar tidak terjadi multiple list data dalam transaksi
+if($jual > 1){
+	?>
+
+	<script type="text/javascript">
+
+		alert("Barang Duplikat... Tidak Dapat melakukan penjualan");
+
+		window.location.href='?page=penjualan&kodepj=<?php echo $kode; ?>'
+	</script>
+
+	<?php
+}
+
+
+
+ else {
+            $inputData = $koneksi->query("INSERT INTO tb_penjualan (kode_penjualan, kode_barcode, jumlah, total, tgl_penjualan ) values('$kode','$kode_barcode', '$jumlah', '$total', '$date' ) ");
+		}
+	
+
+	}
+	
+	
 
 }
 ?>
@@ -114,10 +140,10 @@ while ($data = $sql->fetch_assoc()) {
                   <td> <?php echo $data['jumlah']; ?></td>
                   <td> <?php echo $data['total']; ?></td>
 				  <td>
-					<a href="?page=penjualan&aksi=tambah&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-success btn-flat" title="Tambah" ><i class="fa fa-plus"></i> </a>
-					<a href="?page=penjualan&aksi=kurang&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-warning btn-flat" title="Kurang" ><i class="fa fa-minus"></i></a>
+					<a href="?page=penjualan&aksi=tambah&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode=<?php echo $data['kode_barcode']; ?>" class="btn btn-success btn-flat" title="Tambah" ><i class="fa fa-plus"></i> </a>
+					<a href="?page=penjualan&aksi=kurang&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode=<?php echo $data['kode_barcode']; ?>&jumlah=<?php echo $data['jumlah'] ?>" class="btn btn-warning btn-flat" title="Kurang" ><i class="fa fa-minus"></i></a>
                   	
-					  <a href="?page=penjualan&aksi=delete&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode = <?php echo $data['kode_barcode']; ?>" class="btn btn-danger btn-flat" title="Hapus" ><i class="fa fa-trash-o"></i></a>
+					  <a href="?page=penjualan&aksi=delete&id=<?php echo $data['id'] ?>&kode_pj=<?php echo $kode; ?>&harga_jual=<?php echo $data['harga_jual']; ?>&kode_barcode=<?php echo $data['kode_barcode']; ?>&jumlah=<?php echo $data['jumlah'] ?>" class="btn btn-danger btn-flat" title="Hapus" ><i class="fa fa-trash-o"></i></a>
                   </td>
 
                 </tr>
@@ -153,9 +179,9 @@ while ($data = $sql->fetch_assoc()) {
 			<th colspan="5" style="text-align: right;">Kembali</th>
 			<td><input style="text-align: right;" name="kembali" id="kembali"  type="number">
 			
-			<input type="submit" name="simpan_pj" value="Simpan" class="btn btn-info btn-flat">
+			<input type="submit" name="simpan_pj" value="Simpan" class="btn btn-info btn-flat" onclick="toEnable()">
 
-			<input type="submit" value="Cetak Struk" class="btn btn-success btn-flat" onclick="window.open('page/penjualan/struk.php?kode_pj=<?php echo $kode; ?>&nama_petugas=<?php echo $nama_petugas; ?>','mywindow','width=600px, height=600px, left=300px;')">
+			<input type="submit" name="cetak" id="cetak" value="Cetak Struk" class="btn btn-success btn-flat" onclick="window.open('page/penjualan/struk.php?kode_pj=<?php echo $kode; ?>&nama_petugas=<?php echo $nama_petugas; ?>','mywindow','width=600px, height=600px, left=300px;')">
 			</td>
 			</tr>
 
@@ -214,11 +240,4 @@ function hitung() {
 
 
 	}
-
-	
-}
-
-	
-
-
-</script>
+	</script>
